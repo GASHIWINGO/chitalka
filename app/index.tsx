@@ -15,10 +15,11 @@ import {
 } from './database';
 import DebugScreen from './components/DebugScreen';
 
-// Добавляем тип для тем
+// Определение типа темы для цветовых схем приложения
 type Theme = 'light' | 'dark' | 'sepia';
 
-// Обновляем объект с настройками тем
+// Объект конфигурации тем, содержащий цветовые значения для различных элементов интерфейса
+// Каждая тема (светлая, темная, сепия) определяет согласованную цветовую палитру
 const themeStyles = {
   light: {
     background: '#FFFFFF',
@@ -55,7 +56,8 @@ const themeStyles = {
   }
 };
 
-// Определяем тип для таблицы кодировки
+// Таблица кодировки Windows-1251
+// Сопоставляет байтовые значения Windows-1251 с соответствующими кодовыми точками Unicode
 const windows1251: { [key: number]: number } = {
   0x00: 0x0000,
   0x01: 0x0001,
@@ -203,6 +205,8 @@ const windows1251: { [key: number]: number } = {
   0xFF: 0x044F,
 };
 
+// Декодирует текст в кодировке Windows-1251 в Unicode
+// Принимает буфер Uint8Array и возвращает декодированную строку
 const decode1251 = (buffer: Uint8Array): string => {
   let result = '';
   for (let i = 0; i < buffer.length; i++) {
@@ -350,16 +354,23 @@ const readerStyles = StyleSheet.create({
   }
 });
 
+// Главный компонент приложения
 export default function App() {
-  const [files, setFiles] = useState<BookDB[]>([]);
-  const [currentBook, setCurrentBook] = useState<string | null>(null);
-  const [bookContent, setBookContent] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const scrollViewRef = useRef<ScrollView | null>(null);
-  const [currentTheme, setCurrentTheme] = useState<Theme>('light');
-  const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
+  // Управление состоянием библиотеки книг
+  const [files, setFiles] = useState<BookDB[]>([]); // Список всех книг
+  const [currentBook, setCurrentBook] = useState<string | null>(null); // Текущая открытая книга
+  const [bookContent, setBookContent] = useState<string>(''); // Содержимое текущей книги
+  
+  // Отслеживание прогресса чтения
+  const [currentPage, setCurrentPage] = useState(1); // Номер текущей страницы
+  const [totalPages, setTotalPages] = useState(1); // Общее количество страниц в книге
+  
+  // Управление интерфейсом и темой
+  const scrollViewRef = useRef<ScrollView | null>(null); // Ссылка для управления прокруткой
+  const [currentTheme, setCurrentTheme] = useState<Theme>('light'); // Активная тема
+  const [currentScrollPosition, setCurrentScrollPosition] = useState(0); // Отслеживание позиции прокрутки
 
+  // Инициализация приложения и загрузка сохраненных книг из базы данных
   useEffect(() => {
     const initApp = async () => {
       await initDatabase();
@@ -405,6 +416,7 @@ export default function App() {
     };
   }, []);
 
+  // Функции обработки файлов
   const handleAddBook = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -440,6 +452,7 @@ export default function App() {
     }
   };
 
+  // Определяет кодировку текста книги (UTF-8 или Windows-1251)
   const detectEncoding = async (uri: string): Promise<'UTF-8' | 'Windows-1251'> => {
     const base64Content = await FileSystem.readAsStringAsync(uri, {
       encoding: FileSystem.EncodingType.Base64
@@ -461,6 +474,7 @@ export default function App() {
     return 'UTF-8';
   };
 
+  // Функции управления режимом чтения
   const handleOpenBook = async (book: BookDB) => {
     try {
       // Проверяем существование файла
@@ -515,6 +529,7 @@ export default function App() {
     }
   };
 
+  // Функции навигации и управления состоянием
   const handleBackToList = async () => {
     if (currentBook) {
       const book = await getBookByName(currentBook);
@@ -541,6 +556,7 @@ export default function App() {
     setBookContent('');
   };
 
+  // Обработка прокрутки и расчет страниц
   const handleScroll = async (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const contentHeight = event.nativeEvent.contentSize.height;
@@ -584,6 +600,7 @@ export default function App() {
     }
   };
 
+  // Функция переключения тем - циклически переключает между светлой, темной и сепия темами
   const cycleTheme = () => {
     const themes: Theme[] = ['light', 'dark', 'sepia'];
     const currentIndex = themes.indexOf(currentTheme);
@@ -591,7 +608,7 @@ export default function App() {
     setCurrentTheme(themes[nextIndex]);
   };
 
-  // Добавим функцию для обновления текущей страницы при изменении размера контента
+  // Обновляет количество страниц при изменении размера содержимого
   const handleContentSizeChange = async (width: number, height: number) => {
     const windowHeight = Dimensions.get('window').height - 100;
     const newTotalPages = Math.max(1, Math.ceil(height / windowHeight));
@@ -619,7 +636,7 @@ export default function App() {
     }
   };
 
-  // В начале компонента App добавляем эффект для обновления StatusBar при смене темы
+  // Управление внешним видом StatusBar в зависимости от темы
   useEffect(() => {
     StatusBar.setBarStyle(currentTheme === 'dark' ? 'light-content' : 'dark-content');
     StatusBar.setBackgroundColor(themeStyles[currentTheme].background);
@@ -649,7 +666,7 @@ export default function App() {
               style={[readerStyles.readerButton, { backgroundColor: themeStyles[currentTheme].button }]}
               onPress={handleBackToList}
             >
-              <Text style={readerStyles.readerButtonText}>← Назад</Text>
+              <Text style={readerStyles.readerButtonText}>�� Назад</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={cycleTheme}
