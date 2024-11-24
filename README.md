@@ -1,50 +1,106 @@
-# Welcome to your Expo app 👋
+# Читалка для текстовых файлов 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Мобильное приложение для чтения текстовых файлов, разработанное на React Native с использованием Expo.
 
-## Get started
+## Возможности 🚀
 
-1. Install dependencies
+- Чтение текстовых файлов (*.txt)
+- Поддержка кодировок UTF-8 и Windows-1251
+- Автоматическое определение кодировки
+- Сохранение прогресса чтения
+- Три темы оформления (светлая, тёмная, сепия)
+- Индикатор прогресса для каждой книги
+- Автоматическая очистка списка при удалении файлов
 
-   ```bash
-   npm install
-   ```
+## Требования 📋
 
-2. Start the app
+- [Node.js](https://nodejs.org/) (v16 или выше)
+- [npm](https://www.npmjs.com/) или [yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Android Studio](https://developer.android.com/studio) (для Android)
+- [Xcode](https://developer.apple.com/xcode/) (для iOS, только macOS)
 
-   ```bash
-    npx expo start
-   ```
+## Установка 🛠️
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Клонируйте репозиторий:
 ```bash
-npm run reset-project
+git clone https://github.com/your-username/reader-app.git
+cd reader-app
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Установите зависимости:
+```bash
+npm install
+# или
+yarn install
+```
 
-## Learn more
+3. Запустите приложение:
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Запуск приложения 📱
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+После запуска сервера разработки:
+- Нажмите `a` для запуска на Android эмуляторе
+- Нажмите `i` для запуска на iOS симуляторе
+- Отсканируйте QR-код приложением Expo Go на вашем устройстве
 
-## Join the community
+## Структура проекта 📁
 
-Join our community of developers creating universal apps.
+```
+test2/
+├── app/
+│   ├── index.tsx           # Главный компонент
+│   ├── database.ts         # Работа с хранилищем
+│   ├── _layout.tsx         # Настройки навигации
+│   └── components/
+│       └── DebugScreen.tsx # Экран отладки
+├── assets/                 # Статические ресурсы
+└── README.md              # Документация
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Особенности реализации 💡
+
+### Хранение данных
+- AsyncStorage для сохранения информации о книгах
+- Структура данных книги:
+  - Название файла
+  - Текущая страница
+  - Общее количество страниц
+  - Путь к файлу
+  - Кодировка
+  - Позиция в тексте
+
+### Интерфейс
+- Адаптивный дизайн
+- Три темы оформления
+- Индикатор прогресса чтения
+- Автосохранение позиции
+
+### Отладка
+- Встроенный отладочный интерфейс
+- Просмотр и очистка базы данных
+- Мониторинг хранилища
+
+## Ограничения ⚠️
+
+- Только текстовые файлы (*.txt)
+- Поддержка UTF-8 и Windows-1251
+- Требуется доступ к файловой системе
+
+## Разработка 🔧
+
+### Отладочный режим
+Активация: нажатие на значок лупы в правом верхнем углу.
+Функции:
+- Просмотр базы данных
+- Обновление в реальном времени
+- Очистка данных
+
+### Рекомендации по разработке
+1. Следовать структуре проекта
+2. Использовать TypeScript
+3. Комментировать сложный код
+4. Тестировать разные кодировки
